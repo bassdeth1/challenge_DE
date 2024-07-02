@@ -10,17 +10,21 @@ from src.q3_memory import q3_memory
 import gdown
 
 def descargar_y_descomprimir(url, ruta_destino):
+    # Descargar el archivo ZIP desde Google Drive
     local_filename = os.path.join(ruta_destino, 'tweets.zip')
     os.makedirs(ruta_destino, exist_ok=True)
     gdown.download(url, local_filename, quiet=False)
+    # Descomprimir el archivo ZIP
     with zipfile.ZipFile(local_filename, 'r') as zip_ref:
         zip_ref.extractall(ruta_destino)
+    # Devolver la ruta del archivo JSON descomprimido
     for file_name in os.listdir(ruta_destino):
         if file_name.endswith(".json"):
             return os.path.join(ruta_destino, file_name)
     return None
 
 def mostrar_resultados(nombre_funcion: str, resultados: List[Tuple]):
+    # Mostrar los resultados según la función ejecutada
     if nombre_funcion == "q1_time":
         print(f"Resultados para q1_time: {resultados}")
     elif nombre_funcion == "q1_memory":
@@ -35,6 +39,7 @@ def mostrar_resultados(nombre_funcion: str, resultados: List[Tuple]):
         print(f"Resultados para q3_memory: {resultados}")
 
 def principal():
+    # URL del archivo ZIP a descargar
     url = 'https://drive.google.com/uc?id=1ig2ngoXFTxP5Pa8muXo02mDTFexZzsis'
     ruta_destino = 'archivo/'
     print("Descargando y descomprimiendo el archivo ZIP...")
@@ -43,6 +48,7 @@ def principal():
         print("No se encontró un archivo JSON en el ZIP.")
         return
 
+    # Ejecutar cada función y mostrar sus resultados
     for func in [q1_time, q1_memory, q2_time, q2_memory, q3_time, q3_memory]:
         nombre_funcion = func.__name__
         result = func(archivo_json)
